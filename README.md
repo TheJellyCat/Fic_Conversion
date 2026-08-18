@@ -1,2 +1,2 @@
-# Fic_Conversion
-A script for Texworks, using JavaScript to convert the HTML of fanfics downloaded from Ao3 to the equivalent Latex code. Also handles common escape and Unicode characters as well as corrections to common formatting errors.
+# Fic Conversion - A Texworks Script
+A script intended for use converting Ao3 HTML to Latex. Also converts to Latex quotes (both single and double), converts many Unicode characters to Latex commands, and addresses some common typographical issues. This also contains a batch search and replace feature to automate frequent replacements.
