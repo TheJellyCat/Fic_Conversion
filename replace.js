@@ -51,7 +51,6 @@ var valuesToReplace = [
     // Common characters that need escape
     "\\&","\\%", "\\#", "\\$",
 ];
-// </p><p> </p><p> -> <p></p>  convert manual double spacing?
 // ====================================================================
 // Actual Code. Probably don't edit this unless you need to add 
 // additional functionality.
@@ -73,14 +72,14 @@ if (patternsToLook.length === valuesToReplace.length) {
             
             text = text.replace(regex, currentReplacement);  
         }
+        
     // ===================================
     // Remove empty formatting markers
     // ===================================
 
         text = text.replace(/\r(\s*)\\(\w+)\{\s*\}/g, ""); // return(0+spaces)\command{0+spaces} -> delete
-        text = text.replace(/\s*\\(textbf\{\s*\})|(emph\{\s*\})/g, ""); // need to expand this somehow w/o including other commands
-                                                                        // Also want to cover sout, uline.
-                                                                        // Empty Latex environments?
+        text = text.replace(/\s*\\(textbf\{\s*\})|(emph\{\s*\})/g, ""); // need to expand this somehow (sout, uline) w/o including other commands
+        
     // ===================================
     // Replace spaces in wrong spots
     // ===================================
@@ -136,38 +135,3 @@ else {
     TW.information(null, "Uneven Lists", 
     "The number of patterns and replacements must match.");
 }
-
-/*
-====================================================================
-    TBD: 
-====================================================================
--combine split formatting (\emph{No} \emph{way!}) w/ various spacing (??)
--move punctuation inside formatting (\emph{Maybe}? -> \emph{Maybe?})
--check support for other fic archives
-    -might not be possible for sites w/o an official "download" option. Formatting dependent?
--add support for UK quotation mark style (??)
-    -toggle on/off
--add support for html codes for symbols (or whatever this kind of thing is &amp;) in addition to 
-    replacing regular & with \\& (#, %, $, etc)
-===========
--investigate: find and fix formatting applied to partial words? (may not be possible)
-    Ex: F\emph{oo bar}
-
-===================================
-    Someday TBD?:
-===================================
--full fic conversion
-    -paste in entire HTML
-    -run coversion:
-        -loop through entire text
-        -grab section of text between <!--chapter content--> and <!--/chapter content-->
-        -remove </div> and <div class="userstuff">
-        -insert into new tex file
-        -run replace script
-        -save file as ch#.tex where #=loop number (+1 if index=0)
-        -close file
-        -repeat at next instance of <!--chapter content-->
-
--handle calibre-ized HTML
-
-*/
