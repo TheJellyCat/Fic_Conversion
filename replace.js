@@ -24,7 +24,7 @@
 
 var patternsToLook =  [
     //HTML (tweaks) (used for converting unusual formatting)
-    "<p class=\"MsoNoSpacing\">",  "</p><p>",
+    "<p class=\"MsoNoSpacing\">",  "</p><p>", // check this one
     // HTML (main)
     "<p>", "</p>", "<u>", "</u>", "<i>", "</i>", "<b>", "</b>", "<strong>", "</strong>", 
     "<br/>", "<br />", "<br>", "<em>", "</em>", "<strike>", "</strike>", "<blockquote>", "</blockquote>",
