@@ -14,6 +14,7 @@ Note that some authors or old fics may use unusual/non-standard formatting that 
   - names that are frequently misspelled
   - fixing repeated uppercase/lowercase errors
   - replacing text-based section breaks with fancy ones
+  - adding diacritics and accents
   - anything else your typesetting heart desires...
 
 - Latex replacement for HTML formatting `(<p>, <i>, <b>, etc)`
