@@ -24,7 +24,7 @@
 
 var patternsToLook =  [
     // Tweaks (used for converting unusual formatting)
-    "<p class=\"MsoNoSpacing\">",  "</p><p>", "", // <-idk how this got used, but it broke latex
+    "<p class=\"MsoNoSpacing\">",  "</p><p>", "", // <-this contains u+0094. i'd have two nickels which isn't much, etc.
     // HTML (main)
     "<p>", "</p>", "<u>", "</u>", "<i>", "</i>", "<b>", "</b>", "<strong>", "</strong>", 
     "<br/>", "<br />", "<br>", "<em>", "</em>", "<strike>", "</strike>", "<blockquote>", "</blockquote>",
