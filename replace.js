@@ -7,7 +7,7 @@
 //              typographical issues.
 // Author: JellyCat (based on Lua code by Paulo Cereda:
 //         https://tex.stackexchange.com/questions/84668/search-replace-script-for-texworks)
-// Version: 1.6.0
+// Version: 2.0
 // Script-Type: standalone
 // Context: TeXDocument
 
@@ -52,13 +52,17 @@ var valuesToReplace = [
     // HTML character codes
     "\\&", "\\&", "\\#", "\\#", "\\$", "\\$", "\\%", "\\%",
     "\"", "\"", "\\ldots{}", "\\ldots{}", "---", "---",
-]; 41*/
+]; */
 
 var patterns = [
   {
     patternToLook: [
       '<p class="MsoNoSpacing">',
-      "</p><p>",
+    ],
+    valueToReplace: "<p>",
+  },
+  {
+    patternToLook: [
       "<p>",
       "</p>",
       "<br/>",
@@ -128,7 +132,6 @@ var patterns = [
     valueToReplace: "\\%",
   },
 ];
-// </p><p> </p><p> -> <p></p>  convert manual double spacing?
 // ====================================================================
 // Actual Code. Probably don't edit this unless you need to add
 // additional functionality.
@@ -146,7 +149,6 @@ if (text) {
   function matchAndReplace(pattern) {
     var currentPattern = pattern.patternToLook;
     var currentReplacement = pattern.valueToReplace;
-    var regex = '';
 
     for (var i = 0; i < currentPattern.length; i++) {
       // Escape characters to treat as literal text, not regex rules.
@@ -154,11 +156,10 @@ if (text) {
         /[-\/\\^$*+?.()|[\]{}]/g,
         "\\$&",
       );
-      regex = escapedPattern + "/g";
-    }
+      var regex = new RegExp(escapedPattern, "g");
 
     text = text.replace(regex, currentReplacement);
-  }
+  }}
   //}
   // ===================================
   // Remove empty formatting markers
@@ -242,8 +243,6 @@ if (text) {
 -move punctuation inside formatting (\emph{Maybe}? -> \emph{Maybe?}) (outside can cause odd spacing)
 -check support for other fic archives (Currently checked: Ao3, Fimfiction)
     -might not be possible for sites w/o an official "download" option. Formatting dependent?
--add support for html codes for symbols (or whatever this kind of thing is &amp;) in addition to 
-    replacing regular & with \\& (#, %, $, etc)
 ===========
 -investigate: find and fix formatting applied to partial words? (may not be possible) (how do word boundaries work with \ and {} ?)
     Ex: F\emph{oo bar}
