@@ -149,7 +149,7 @@ if (text) {
 
     for (var i = 0; i < currentPattern.length; i++) {
       // Escape characters to treat as literal text, not regex rules.
-      var escapedPattern = currentPattern.replace(
+      var escapedPattern = currentPattern[i].replace(
         /[-\/\\^$*+?.()|[\]{}]/g,
         "\\$&",
       );
