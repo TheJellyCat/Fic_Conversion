@@ -146,6 +146,7 @@ if (text) {
   function matchAndReplace(pattern) {
     var currentPattern = pattern.patternToLook;
     var currentReplacement = pattern.valueToReplace;
+    var regex;
 
     for (var i = 0; i < currentPattern.length; i++) {
       // Escape characters to treat as literal text, not regex rules.
@@ -153,7 +154,7 @@ if (text) {
         /[-\/\\^$*+?.()|[\]{}]/g,
         "\\$&",
       );
-      var regex = new RegExp(escapedPattern, "g");
+      regex = new RegExp(escapedPattern, "g");
     }
 
     text = text.replace(regex, currentReplacement);
