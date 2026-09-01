@@ -7,7 +7,7 @@
 //              typographical issues.
 // Author: JellyCat (based on Lua code by Paulo Cereda:
 //         https://tex.stackexchange.com/questions/84668/search-replace-script-for-texworks)
-// Version: 1.5.8
+// Version: 1.6.0
 // Script-Type: standalone
 // Context: TeXDocument
 
@@ -23,8 +23,8 @@
 //       -uline and sout require package ulem.
 
 var patternsToLook =  [
-    //HTML (tweaks) (used for converting unusual formatting)
-    "<p class=\"MsoNoSpacing\">",  "</p><p>", // check this one
+    // Tweaks (used for converting unusual formatting)
+    "<p class=\"MsoNoSpacing\">",  "</p><p>", "", // <-idk how this got used, but it broke latex
     // HTML (main)
     "<p>", "</p>", "<u>", "</u>", "<i>", "</i>", "<b>", "</b>", "<strong>", "</strong>", 
     "<br/>", "<br />", "<br>", "<em>", "</em>", "<strike>", "</strike>", "<blockquote>", "</blockquote>",
@@ -32,14 +32,15 @@ var patternsToLook =  [
     "<p> </p>", "<p></p>",
     // Latex syntax 
     "...", "…", "—",
-    // Common characters that need escape
-    "&amp;","%", "#", "$",
-    //Accented letters (tbd: figure out a regex for more generic diacritic conversion)
+    // HTML character codes
+    "&amp;", "&#38;", "&num;", "&#35;", "&dollar;", "&#36;", "&percnt;", "&#37;",
+    "&quot;", "&#34;", "&hellip;", "&#8230;", "&mdash;", "&#8212;",
+    //Accented letters actually work fine - check html versions?)
 
 ];
 var valuesToReplace = [
-    //HTML (tweaks) (used for converting unusual formatting)
-    "<p>", "<p></p>",
+    // Tweaks (used for converting unusual formatting)
+    "<p>", "<p></p>", "\"",
     // HTML (main) (Could use \\par instead of \r if preferred. I just like 
     // to use double spacing between paragraphs.)
     "\r", "\r", "\\uline{", "}", "\\emph{", "}", "\\textbf{", "}", "\\textbf{", "}",
@@ -48,9 +49,11 @@ var valuesToReplace = [
     "","",
     // Latex syntax 
     "\\ldots{}", "\\ldots{}", "---",
-    // Common characters that need escape
-    "\\&","\\%", "\\#", "\\$",
+    // HTML character codes
+    "\\&", "\\&", "\\#", "\\#", "\\$", "\\$", "\\%", "\\%",
+    "\"", "\"", "\\ldots{}", "\\ldots{}", "---", "---",
 ];
+// </p><p> </p><p> -> <p></p>  convert manual double spacing?
 // ====================================================================
 // Actual Code. Probably don't edit this unless you need to add 
 // additional functionality.
@@ -72,34 +75,42 @@ if (patternsToLook.length === valuesToReplace.length) {
             
             text = text.replace(regex, currentReplacement);  
         }
-        
     // ===================================
     // Remove empty formatting markers
     // ===================================
 
-        text = text.replace(/\r(\s*)\\(\w+)\{\s*\}/g, ""); // return(0+spaces)\command{0+spaces} -> delete
-        text = text.replace(/\s*\\(textbf\{\s*\})|(emph\{\s*\})/g, ""); // need to expand this somehow (sout, uline) w/o including other commands
-        
+        // text = text.replace(/\r(\s*)\\(\w+)\{\s*\}/g, ""); //empty commands on empty lines -> delete || unnecessary?
+        text = text.replace(/\s*\\(textbf|emph|uline|sout)\{\s*\})/g, ""); // empty formatting commands
+                                                                           // Empty Latex environments (quotation)?
+    // ===================================
+    // Misc fixes
+    // ===================================
+
+        text = text.replace(/([^\\])([#\$%&])/g, "$1\\$2"); // #,$,etc -> \#, \$, etc || how to handle ### ? currently -> \##\# (running 2x works)
+
     // ===================================
     // Replace spaces in wrong spots
     // ===================================
-  
-        text = text.replace(/(\w)\\(ldots)\{\s*\}([\w|\\])/g, "$1\\$2{} $3"); // foo\ldots{}bar -> foo\ldots{} bar (preference)
+
+        text = text.replace(/(\w)\\(ldots)\{\s*\}([\w\\])/g, "$1\\$2{} $3"); // foo\ldots{}bar -> foo\ldots{} bar (preference)
         text = text.replace(/([\w,!'\.\?])\\(\w+)\{\s(.+?)\}/g, "$1 \\$2{$3}"); // foo\emph{ bar} -> foo \emph{bar}
         text = text.replace(/\\(\w+)\{(.+?)\s\}/g, "\\$1{$2} "); // \emph{bar } -> \emph{bar}\s
-        text = text.replace(/\u0020[,\.\?!]/g, "$1"); // words . -> words.
-        text = text.replace(/([,\.\?!])(\w+)/g, "$1 $2"); // foo.bar -> foo. bar
+        text = text.replace(/[^\S\r\n]([,\.\?!])/g, "$1"); // words . -> words.
+        text = text.replace(/([,\.\?!])([a-zA-Z]+)/g, "$1 $2"); // foo.bar -> foo. bar
         text = text.replace(/[\r\n]+[^\S\r\n]*[\r\n]+/g, "\r\r"); // replace triple+ par breaks (messy?)
         text = text.replace(/[^\S\r\n][^\S\r\n]/g, " "); // foo  bar -> foo bar
-        text = text.replace(/\\emph\{(\w+)\}\s*\\emph\{(\w+[,\.\?!']*)\}/g, "\\emph{$1 $2}"); // \emph{foo} \emph{bar} -> \emph{foo bar}
+        text = text.replace(/\\(emph|textbf)\{(\w+)\}\s*\\\1\{(\w+[,\.\?!']*)\}/g, "\\$1{$2 $3}"); // \emph{foo} \emph{bar} -> \emph{foo bar}
 
     // ===================================
     // Quote conversion and handling
     // ===================================
 
     /* Including smart/unicode quotes.
-    Note that quote handling should be the last step - any additional 
-    features should go above this. */
+    Note that quote handling should almost alwayys be the last step - any additional 
+    features should likely go above this. */
+
+        text = text.replace(/([\s*\w"“\}])--([\s*\w"”])/g, "$1---$2"); // em dash conversion
+        text = text.replace(/[^\S\r\n]---[^\S\r\n]/g, "---"); // close up em dashes
 
         /* Convert double quotes around em dashes. This is styled for
         dialog starting/ending mid-sentence since I encounter this
@@ -108,7 +119,7 @@ if (patternsToLook.length === valuesToReplace.length) {
         text = text.replace(/---"|---”/g, "---''");
         text = text.replace("---}", "}---");
         // Convert opening double quotes
-        text = text.replace(/(^|\s|\{|\})[“"]/g, "$1``");
+        text = text.replace(/(^|\s)[“"]/g, "$1``");
         // Convert closing double quotes: any remaining " 
         text = text.replace(/[”"]/g, "''");
 
@@ -117,7 +128,7 @@ if (patternsToLook.length === valuesToReplace.length) {
         // Convert closing single quotes and apostrophes
         text = text.replace(/’/g, "'");
         
-        // Move quotes outside formatting commands (needed?)
+        // Move quotes outside formatting commands (needed? check spacing)
         text = text.replace(/('')\s*\}/g, "}''"); // ``foo \emph{bar''} -> ``foo \emph{bar}''
         text = text.replace(/(')\s*\}/g, "}'");
 
@@ -135,3 +146,34 @@ else {
     TW.information(null, "Uneven Lists", 
     "The number of patterns and replacements must match.");
 }
+
+/*
+====================================================================
+    TBD: 
+====================================================================
+-move punctuation inside formatting (\emph{Maybe}? -> \emph{Maybe?}) (outside can cause odd spacing)
+-check support for other fic archives (Currently checked: Ao3, Fimfiction)
+    -might not be possible for sites w/o an official "download" option. Formatting dependent?
+-add support for html codes for symbols (or whatever this kind of thing is &amp;) in addition to 
+    replacing regular & with \\& (#, %, $, etc)
+===========
+-investigate: find and fix formatting applied to partial words? (may not be possible) (how do word boundaries work with \ and {} ?)
+    Ex: F\emph{oo bar}
+
+===================================
+    Someday TBD?:
+===================================
+-full fic conversion
+    -open entire HTML
+    -run coversion (Ao3):
+        -grab section of text between <!--chapter content--> and <!--/chapter content-->
+        -remove </div> and <div class="userstuff">
+        -insert into new tex file
+        -run replace script (posibly format \chapter{} as well)
+        -save file as ch#.tex where #=loop number (+1 if index=0)
+        -close new file
+        -repeat at next instance of <!--chapter content-->
+
+-handle calibre-ized HTML
+
+*/
