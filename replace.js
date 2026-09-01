@@ -22,7 +22,7 @@
 // NOTE: -Remember to use \\ to define Latex functions. 
 //       -uline and sout require package ulem.
 
-var patternsToLook =  [
+/* var patternsToLook =  [
     // Tweaks (used for converting unusual formatting)
     "<p class=\"MsoNoSpacing\">",  "</p><p>", "", // <-this contains u+0094. i'd have two nickels which isn't much, etc.
     // HTML (main)
@@ -52,7 +52,75 @@ var valuesToReplace = [
     // HTML character codes
     "\\&", "\\&", "\\#", "\\#", "\\$", "\\$", "\\%", "\\%",
     "\"", "\"", "\\ldots{}", "\\ldots{}", "---", "---",
-];
+]; 41*/ 
+
+var patterns = [
+    {
+        patternToLook: ["<p class=\"MsoNoSpacing\">",  "</p><p>", "<p>", "</p>", "<br/>", "<br />", "<br>"],
+        valueToReplace: "\r"
+    },
+    {
+        patternToLook: ["", "&quot;", "&#34;"],
+        valueToReplace: "\""
+
+    },
+    {
+        patternToLook: ["<u>"],
+        valueToReplace: "\\uline{"
+    },
+    {
+        patternToLook: ["<i>", "<em>"],
+        valueToReplace: "\\emph{"
+    },
+    {
+        patternToLook: ["<b>", "<strong>"],
+        valueToReplace: "\\textbf{"
+    },
+    {
+        patternToLook: ["<strike>"],
+        valueToReplace: "\\sout{"
+    },
+    {
+        patternToLook: ["</u>", "</i>", "</b>", "</strong>", "</em>", "</strike>", ],
+        valueToReplace: "}"
+    },
+    {
+        patternToLook: ["<blockquote>"],
+        valueToReplace: "\\begin{quotation}"
+    },
+    {
+        patternToLook: ["</blockquote>"],
+        valueToReplace: "\\end{quotation}"
+    },
+    {
+        patternToLook: ["<p> </p>", "<p></p>"],
+        valueToReplace: ""
+    },
+    {
+        patternToLook: ["...", "…", "&hellip;", "&#8230;"],
+        valueToReplace: "\\ldots{}"
+    },
+    {
+        patternToLook: ["—", "&mdash;", "&#8212;"],
+        valueToReplace: "---"
+    },
+    {
+        patternToLook: ["&amp;", "&#38;"],
+        valueToReplace: "\\&"
+    },
+    {
+        patternToLook: ["&num;", "&#35;"],
+        valueToReplace: "\\#"
+    },
+    {
+        patternToLook: ["&dollar;", "&#36;"],
+        valueToReplace: "\\$"
+    },
+    {
+        patternToLook: ["&percnt;", "&#37;"],
+        valueToReplace: "\\%"
+    }
+]
 // </p><p> </p><p> -> <p></p>  convert manual double spacing?
 // ====================================================================
 // Actual Code. Probably don't edit this unless you need to add 
