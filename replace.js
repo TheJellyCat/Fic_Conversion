@@ -128,14 +128,17 @@ var patterns = [
 // ====================================================================
 
 // Verify array lengths match.
-if (patternsToLook.length === valuesToReplace.length) {
+// if (patternsToLook.length === valuesToReplace.length) {
     // Grab the whole document text.
     var text = TW.target.text;
     if (text) {
         // Implement replacement lists.
-        for (var i = 0; i < patternsToLook.length; i++) {
-            var currentPattern = patternsToLook[i];
-            var currentReplacement = valuesToReplace[i];
+        //for (var i = 0; i < patternsToLook.length; i++) {
+        patterns.forEach(matchAndReplace);
+
+        function matchAndReplace(pattern){
+            var currentPattern = pattern.patternToLook;
+            var currentReplacement = pattern.valueToReplace;
             
             // Escape characters to treat as literal text, not regex rules.
             var escapedPattern = currentPattern.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
@@ -143,6 +146,7 @@ if (patternsToLook.length === valuesToReplace.length) {
             
             text = text.replace(regex, currentReplacement);  
         }
+        //}
     // ===================================
     // Remove empty formatting markers
     // ===================================
@@ -208,12 +212,12 @@ if (patternsToLook.length === valuesToReplace.length) {
         TW.target.selectAll();
         TW.target.insertText(text);
     }
-} 
+//} 
 // In case replacement lists are not the same length
-else {
-    TW.information(null, "Uneven Lists", 
-    "The number of patterns and replacements must match.");
-}
+//else {
+    //TW.information(null, "Uneven Lists", 
+   // "The number of patterns and replacements must match.");
+//}
 
 /*
 ====================================================================
