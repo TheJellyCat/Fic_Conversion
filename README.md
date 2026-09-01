@@ -34,3 +34,6 @@ Note that some authors or old fics may use unusual/non-standard formatting that 
     - Note this excludes underline and strike-through where separation of formatted words is visible.
       
 Each of these features, excluding quote conversion, is a single line and can be independently turned off or changed. Note that this may occasionally introduce quirks to quote conversion. I've attempted to write things in a way that keep these separate, but let me know if you find that something breaks!
+
+### A Note
+As much as I'd like to account for every possible situation, there will always be some combination of typos/spacing/etc that causes something to be replaced incorrectly. If this is a frequent occurrence, drop a note in the issues. If this is one in a hundred, it will probably need to be considered an outlier and just be corrected manually. Always proofread your text!
