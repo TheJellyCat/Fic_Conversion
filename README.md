@@ -20,7 +20,7 @@ Note that some authors or old fics may use unusual/non-standard formatting that 
 - Latex replacement for HTML formatting `(<p>, <i>, <b>, etc)`
   -   includes support for the Latex package ulem for underline and strike-through
   -   includes HTML character code recognition for common characters `(#, &, ", etc)`
-  -   Note that this uses the search-and-replace aspect, so turning that off will break this.
+  -   Note that this currently uses the search-and-replace aspect, so turning that off will break this.
 - Latex replacement for Unicode characters, including smart quotes (ellipsis, em dash)
   -   Quotes/smart quotes around em dashes are currently formatted for the more common use of dialog ending or beginning abruptly, i.e. `"Like I said---"` or `"---my entire evil plan."` Some manual adjustment may be needed for other cases.
   -   Spacing around ellipses does not have hard and fast rules, so this is styled by default for my preference: `"The words... they have spaces!"` The first line under the "Replace spaces in wrong spots" section controls this if you would like to change it.
