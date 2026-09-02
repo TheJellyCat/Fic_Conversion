@@ -3,11 +3,13 @@ A script intended for use converting Ao3 HTML to Latex. Also converts to Latex q
 
 Still in development.
 
-### Support confirmed for:
+**Support confirmed for:**
 - Ao3
 - FimFiction
 
 Note that some authors or old fics may use unusual/non-standard formatting that has not been checked. Let me know if you find something!
+
+As much as I'd like to account for every possible situation, there will always be some combination of typos/spacing/etc that causes something to be replaced incorrectly. If this is a frequent occurrence, drop a note in the issues. If this is one in a hundred, it will probably need to be considered an outlier and just be corrected manually. Always proofread your text!
 
 ## Features:
 - Easy to edit batch search-and-replace function! If there are words, names, or other "patterns" that you find yourself frequently having to replace, you can add them in and make all replacements throughout the document all at once. All additional features can be commented out if you wish to only use the search-and-replace function. Useful for things such as:
@@ -36,5 +38,8 @@ Note that some authors or old fics may use unusual/non-standard formatting that 
       
 Each of these features, excluding quote conversion, is a single line and can be independently turned off or changed. Note that this may occasionally introduce quirks to quote conversion. I've attempted to write things in a way that keep these separate, but let me know if you find that something breaks!
 
-### A Note
-As much as I'd like to account for every possible situation, there will always be some combination of typos/spacing/etc that causes something to be replaced incorrectly. If this is a frequent occurrence, drop a note in the issues. If this is one in a hundred, it will probably need to be considered an outlier and just be corrected manually. Always proofread your text!
+## How to use it
+TBD
+
+## Adding scripts to TexWorks
+TBD
